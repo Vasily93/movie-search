@@ -22,7 +22,6 @@ const createAnchorElement = (movie) => {
         search.value = movie.Title;
         dropdownMenu.classList.remove('is-active');
         const movieDetails = await fetchData({i: e.target.id});
-        console.log('----->',movieDetails);
         document.querySelector('.summary').innerHTML = createMovieTemplate(movieDetails);
     }) 
     return a;
@@ -40,10 +39,30 @@ const createMovieTemplate = (movieDetail) => {
             <div class="media-content">
                 <div class="content">
                     <h1>${movieDetail.Title}</h1>
-                    <h3>${movieDetail.Awards}</h3>
+                    <h3>${movieDetail.Genre}</h3>
                     <p>${movieDetail.Plot}</p>
                 </div>
             </div>
+        </article>
+        <article class="notification is-primary">
+            <p class="title">${movieDetail.Awards}</p>
+            <p class="subtitle">Awards</p>
+        </article>
+        <article class="notification is-primary">
+            <p class="title">${movieDetail.BoxOffice}</p>
+            <p class="subtitle">Box Office</p>
+        </article>
+        <article class="notification is-primary">
+            <p class="title">${movieDetail.Metascore}</p>
+            <p class="subtitle">Metascore</p>
+        </article>
+        <article class="notification is-primary">
+            <p class="title">${movieDetail.imdbRating}</p>
+            <p class="subtitle">imdb Rating</p>
+        </article>
+        <article class="notification is-primary">
+            <p class="title">${movieDetail.imdbVotes}</p>
+            <p class="subtitle">imdb Votes</p>
         </article>
     </div>
     `
