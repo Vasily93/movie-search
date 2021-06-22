@@ -13,19 +13,7 @@ const debounce = (func, delay = 1000) => {
 }
 
 //function to create anchor element for the drop down list from search results
-const createAnchorElement = (movie) => {
-    const a = document.createElement('a');
-    a.setAttribute('class', 'dropdown-item');
-    a.setAttribute('id', movie.imdbID);
-    a.innerHTML = movie.Title;
-    a.addEventListener('click', async (e) => {
-        search.value = movie.Title;
-        dropdownMenu.classList.remove('is-active');
-        const movieDetails = await fetchData({i: e.target.id});
-        document.querySelector('.summary').innerHTML = createMovieTemplate(movieDetails);
-    }) 
-    return a;
-}
+
 
 const createMovieTemplate = (movieDetail) => {
     return `

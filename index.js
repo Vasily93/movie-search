@@ -1,22 +1,26 @@
-const root = document.querySelector('.autocomplete');
-root.innerHTML = `
-<label><b>Search For a Movie</b></label>
-<input id="search"/>
-<div class="dropdown">
-<div class="dropdown-menu">
-<div class="dropdown-content results"></div>
-</div>
-</div>
-`;
 
-const search = document.querySelector('#search');
-const searchList = document.querySelector('.dropdown-content');
-const dropdownMenu = document.querySelector('.dropdown');
+createAutoComplete({
+    root: document.querySelector('.autocomplete'),
+    renderOption(movie) {
+      const option = document.createElement('a');
+      option.setAttribute('id', movie.imdbID);
+      const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
 
-document.addEventListener('click' , e  => {
-    if(!root.contains(e.target)) {
-        dropdownMenu.classList.remove('is-active');
-    }
+      option.classList.add('dropdown-item');
+      option.innerHTML = `
+      <img src="${imgSrc}" />
+      ${movie.Title} , ${movie.Year}
+    `;
+    return option;
+    },
+    async onOptionSelect(movie) {
+        const response = await fetchData({i: movie.imdbID});
+        document.querySelector('.summary').innerHTML = createMovieTemplate(response);
+    },
+    inputValue(movie) {
+        return movie.Title;
+    },
+
 })
 
 //API REQUEST
@@ -26,35 +30,9 @@ const fetchData = async (paramsObj) => {
     params[entries[0]] = entries[1];
 
     const response = await axios.get('http://www.omdbapi.com/', {params});
-    // console.log('fetchdata',response)
     if(response.data.Error) { 
         console.log('no movies found!')
         return []; }
 
     return response.data;
 }
-
-const onInput = async (event) => {
-    searchList.innerHTML = ''
-    dropdownMenu.classList.add('is-active');
-
-    const data = await fetchData({s: event.target.value});
-    // console.log('onInput',data);
-    if(!data.Search) {
-        dropdownMenu.classList.remove('is-active');
-        return;
-    }
-    const movies = data.Search;
-    for(movie of movies) {
-        const a = createAnchorElement(movie);
-        searchList.appendChild(a);
-    }
-}
-
-
-
-//DOM
-search.addEventListener('input', debounce(onInput, 500))
-
-
-  
