@@ -47,5 +47,21 @@ const onMovieSelect = async (movie, element, side) => {
 }
 
 const runTheComparison = () => {
-    console.log('Run the comparison!!!')
+    const leftStats = document.querySelectorAll('.left-summary .notification');
+    const rightStats = document.querySelectorAll('.right-summary .notification');
+    leftStats.forEach((leftStat, index) => {
+        const rightStat = rightStats[index];
+        const leftValue = leftStat.dataset.value;
+        const rightValue = rightStat.dataset.value;
+        console.log(leftValue, '------', rightValue, typeof leftValue);
+        if(rightValue > leftValue) {
+            console.log('right win')
+            leftStat.classList.remove('is-primary');
+            leftStat.classList.add('is-warning');
+        } else {
+            console.log('left win')
+            rightStat.classList.remove('is-primary');
+            rightStat.classList.add('is-warning');
+        }
+    });
 }

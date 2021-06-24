@@ -20,7 +20,7 @@ const createMovieTemplate = (movieDetail) => {
     );
     const metascore = parseInt(movieDetail.Metascore);
     const imdbrating = parseFloat(movieDetail.imdbRating);
-    const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
+    const imdbvotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
     const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
         let val = parseInt(word);
         if(isNaN(val)) {
@@ -29,7 +29,7 @@ const createMovieTemplate = (movieDetail) => {
             return prev + val;
         }
     }, 0);
-    const totalSum = dollars + metascore + imdbrating + imdbVotes + awards;
+    const totalSum = dollars + metascore + imdbrating + imdbvotes + awards;
     console.log(totalSum)
     return `
     <div>
@@ -47,23 +47,23 @@ const createMovieTemplate = (movieDetail) => {
                 </div>
             </div>
         </article>
-        <article class="notification is-primary">
+        <article data-value="${awards}" class="notification is-primary">
             <p class="title">${movieDetail.Awards}</p>
             <p class="subtitle">Awards</p>
         </article>
-        <article class="notification is-primary">
+        <article data-value="${dollars}" class="notification is-primary">
             <p class="title">${movieDetail.BoxOffice}</p>
             <p class="subtitle">Box Office</p>
         </article>
-        <article class="notification is-primary">
+        <article data-value="${metascore}" class="notification is-primary">
             <p class="title">${movieDetail.Metascore}</p>
             <p class="subtitle">Metascore</p>
         </article>
-        <article class="notification is-primary">
+        <article data-value="${imdbrating}" class="notification is-primary">
             <p class="title">${movieDetail.imdbRating}</p>
             <p class="subtitle">imdb Rating</p>
         </article>
-        <article class="notification is-primary">
+        <article data-value="${imdbvotes}" class="notification is-primary">
             <p class="title">${movieDetail.imdbVotes}</p>
             <p class="subtitle">imdb Votes</p>
         </article>
