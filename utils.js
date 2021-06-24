@@ -14,6 +14,23 @@ const debounce = (func, delay = 1000) => {
 
 //function to create anchor element for the drop down list from search results
 const createMovieTemplate = (movieDetail) => {
+    const dollars = parseInt(movieDetail.BoxOffice
+        .replace(/\$/g, '')
+        .replace(/,/g, '')
+    );
+    const metascore = parseInt(movieDetail.Metascore);
+    const imdbrating = parseFloat(movieDetail.imdbRating);
+    const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
+    const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
+        let val = parseInt(word);
+        if(isNaN(val)) {
+            return prev;
+        } else {
+            return prev + val;
+        }
+    }, 0);
+    const totalSum = dollars + metascore + imdbrating + imdbVotes + awards;
+    console.log(totalSum)
     return `
     <div>
         <article class="media">
