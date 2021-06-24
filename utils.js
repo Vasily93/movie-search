@@ -13,8 +13,6 @@ const debounce = (func, delay = 1000) => {
 }
 
 //function to create anchor element for the drop down list from search results
-
-
 const createMovieTemplate = (movieDetail) => {
     return `
     <div>
@@ -54,4 +52,18 @@ const createMovieTemplate = (movieDetail) => {
         </article>
     </div>
     `
+}
+
+//API REQUEST
+const fetchData = async (paramsObj) => {
+    let params = { apikey: 'e881083e' };
+    const entries = Object.entries(paramsObj)[0];
+    params[entries[0]] = entries[1];
+
+    const response = await axios.get('http://www.omdbapi.com/', {params});
+    if(response.data.Error) { 
+        console.log('no movies found!')
+        return []; }
+
+    return response.data;
 }

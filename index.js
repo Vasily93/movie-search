@@ -1,38 +1,51 @@
+const autoCompleteConfig = {
+renderOption(movie) {
+    const option = document.createElement('a');
+    option.setAttribute('id', movie.imdbID);
+    const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
 
-createAutoComplete({
-    root: document.querySelector('.autocomplete'),
-    renderOption(movie) {
-      const option = document.createElement('a');
-      option.setAttribute('id', movie.imdbID);
-      const imgSrc = movie.Poster === 'N/A' ? '' : movie.Poster;
-
-      option.classList.add('dropdown-item');
-      option.innerHTML = `
-      <img src="${imgSrc}" />
-      ${movie.Title} , ${movie.Year}
+    option.classList.add('dropdown-item');
+    option.innerHTML = `
+    <img src="${imgSrc}" />
+    ${movie.Title} , ${movie.Year}
     `;
     return option;
     },
-    async onOptionSelect(movie) {
-        const response = await fetchData({i: movie.imdbID});
-        document.querySelector('.summary').innerHTML = createMovieTemplate(response);
-    },
     inputValue(movie) {
         return movie.Title;
-    },
+    }
+}
 
+createAutoComplete({
+    ...autoCompleteConfig,
+    root: document.querySelector('.left-autocomplete'),
+    onOptionSelect(movie) {
+        onMovieSelect(movie, document.querySelector('.left-summary'), 'left')
+    },
 })
 
-//API REQUEST
-const fetchData = async (paramsObj) => {
-    let params = { apikey: 'e881083e' };
-    const entries = Object.entries(paramsObj)[0];
-    params[entries[0]] = entries[1];
+createAutoComplete({
+    ...autoCompleteConfig,
+    root: document.querySelector('.right-autocomplete'),
+   onOptionSelect(movie) {
+        onMovieSelect(movie, document.querySelector('.right-summary'), 'right')
+    },
+})
 
-    const response = await axios.get('http://www.omdbapi.com/', {params});
-    if(response.data.Error) { 
-        console.log('no movies found!')
-        return []; }
+let leftMovie;
+let rightMovie;
+const onMovieSelect = async (movie, element, side) => {
+    const response = await fetchData({i: movie.imdbID});
+    element.innerHTML = createMovieTemplate(response);
 
-    return response.data;
+    if(side === 'left') {leftMovie = response;}
+    else {rightMovie = response;}
+
+    if(leftMovie && rightMovie) {
+        runTheComparison();
+    }
+}
+
+const runTheComparison = () => {
+    console.log('Run the comparison!!!')
 }
